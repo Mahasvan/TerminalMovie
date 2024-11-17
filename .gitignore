@@ -1,0 +1,7 @@
+.venv/
+__pycache__/
+frames/
+*/.DS_Store
+*/.ipynb_checkpoints
+*/.vscode
+*/.pytest
