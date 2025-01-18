@@ -1,42 +1,33 @@
 from video_processing import VideoProcessor
-from image_processing import ImageProcessor
+# from image_processing import ImageProcessor
 
 import os, json
 
-file_path = input("Enter the path of the video: ")
+import numpy as np
+
+# file_path = input("Enter the path of the video: ")
+file_path = "rec.mp4"
 file_path = file_path.replace("'", "")
-save_path = input("Enter the path to save the frames: ")
-save_path = save_path.replace("'", "")
 
-if not os.path.exists(save_path):
-    os.makedirs(save_path)
+processor = VideoProcessor(file_path, 'frames')
 
-if not os.path.exists(os.path.join(save_path, "frame0.jpg")):
-    vp = VideoProcessor(file_path, save_path)
-    print("Splitting into frames")
-    vp.split_to_frames()
-    print("Split! Frames: ", vp.frame_count)
+fps, width, height, channels, image = processor.get_deets()
 
-print("Processing frames")
-frames = os.listdir(save_path)
-frames.sort(key=lambda x: int(x.replace("frame", "").replace(".jpg", "")))
+print(image[0][0])
+print(image.shape)
+image = image.mean(axis=2).astype(int)
 
-processed_frames_path = os.path.join(save_path, "processed")
-if not os.path.exists(processed_frames_path):
-    os.makedirs(processed_frames_path, exist_ok=True)
+# import matplotlib.pyplot as plt
+# plt.imshow(image, cmap='gray')
+# plt.show()
 
-matrix_path = os.path.join(save_path, "matrices")
-if not os.path.exists(matrix_path):
-    os.makedirs(matrix_path, exist_ok=True)
+sobel_x = [[-1, 0, 1], [-2, 0, 2], [-1, 0, 1]]
+sobel_y = [[1, 2, 1], [0, 0, 0], [-1, -2, -1]]
 
-for frame in frames:
-    print("Processing", frame)
-    source_path = os.path.join(save_path, frame)
-    dest_path = os.path.join(processed_frames_path, frame)
-    matrix_dest_path = os.path.join(matrix_path, frame.replace(".jpg", ".json"))
-    ip = ImageProcessor(source_path, dest_path)
-    ip.remove_background()
-    ip.downsample()
-    matrix = ip.convert_to_xterm()
-    with open(matrix_dest_path, 'w') as f:
-        json.dump(matrix, f)
+def convolve(image, kernel):
+    kernel = np.array(kernel)
+    output = np.zeros_like(image)
+    for i in range(1, image.shape[0]-1):
+        for j in range(1, image.shape[1]-1):
+            output[i, j] = (image[i-1:i+2, j-1:j+2] * kernel).sum()
+    return output

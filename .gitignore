@@ -5,3 +5,4 @@ frames/
 */.ipynb_checkpoints
 */.vscode
 */.pytest
+venv/

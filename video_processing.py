@@ -18,4 +18,12 @@ class VideoProcessor:
             print("Saved to:", save_path + f"{count}.jpg")
             success,image = vidcap.read()
             self.frame_count += 1
-            count += 1
+            count += 1  
+            
+    def get_deets(self):
+        vidcap = cv2.VideoCapture(self.path)
+        fps = vidcap.get(cv2.CAP_PROP_FPS)
+        success, image = vidcap.read()
+        height, width, layers = image.shape
+        return fps, height, width, layers, image
+    
