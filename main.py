@@ -1,7 +1,5 @@
-from video_processing import VideoProcessor
+from processing.video_processing import VideoProcessor
 # from image_processing import ImageProcessor
-
-import os, json
 
 import numpy as np
 
