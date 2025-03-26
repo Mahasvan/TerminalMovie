@@ -67,10 +67,12 @@ class VideoProcessor:
             number = frame.lstrip("frame").rstrip(".jpg")
             processor = ImageProcessor(os.path.join(self.frame_path, frame))
             edges = processor.asciify(downsample=downsample)
-            with open(os.path.join(self.output_path, f"combined{int(number):0{n_digits}d}.txt"), 'w') as f:
+            final_name = f"combined{int(number):0{n_digits}d}.txt"
+            with open(os.path.join(self.output_path, final_name), 'w') as f:
                 for i in range(edges.shape[0]):
                     f.write("".join(list(edges[i, :])))
                     f.write("\n")
+            print("Saved to:", os.path.join(self.output_path, final_name))
 
     def print(self, speed=1, combined=False, edges=False):
         if combined:
