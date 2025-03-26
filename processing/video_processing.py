@@ -6,6 +6,7 @@ import os
 from processing.image_processing import ImageProcessor
 
 import time
+from processing.shell import RED, END_FORMATTING
 
 class VideoProcessor:
     def __init__(self, file_path, frame_path, output_path) -> None:
@@ -91,8 +92,9 @@ class VideoProcessor:
 
         history = []
         for frame in data:
-            os.system("cls") if os.name == "nt" else os.system("clear")
             start = time.time()
+            os.system("cls") if os.name == "nt" else os.system("clear")
+            print(RED, end="")
             print(frame)
             end = time.time()
             diff = end - start

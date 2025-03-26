@@ -5,6 +5,7 @@ from PIL import Image, ImageFilter
 
 import numpy as np
 
+from processing.shell import RED, END_FORMATTING
 from collections import Counter
 
 class ImageLoader:
@@ -120,8 +121,12 @@ class ImageProcessor:
                     chars[i, j] = "　"
         return chars
 
+    def get_colours(self, downsample=4):
+        return self.image_loader.numpy_color[::downsample, ::downsample]
+
+
     def intensity_char_mapping(self, downsample: int = 4):
-        chars = "　．，：～０＆％＃＠"
+        chars = list("　．，：～０＆％＃") + ["██"]
         limits = [255/len(chars) * x for x in range(1,11)]
         # print(limits)
         # ten values, steps of 25.5
